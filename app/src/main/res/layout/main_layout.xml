@@ -52,8 +52,12 @@
 
 		<include
 			layout="@layout/calendar_content"/>
+		
+		
 
 	</android.support.v4.widget.NestedScrollView>
+	
+	<include layout="@layout/bottom_frame" />
 
 	<android.support.design.widget.FloatingActionButton
 		android:layout_height="wrap_content"

@@ -179,7 +179,7 @@ public class MainActivity extends AppCompatActivity
 			if (now.get(Calendar.YEAR) == frameOfDates.get(count).getCalendar().get(Calendar.YEAR)
 				&& now.get(Calendar.DAY_OF_YEAR) == frameOfDates.get(count).getCalendar().get(Calendar.DAY_OF_YEAR)
 				&& frameOfDates.get(count).getMonthOffset() == 0)
-				tv.setTextColor(0xffcc6670);
+				tv.setTextColor(0xffff6670);
 			
 			/// Слушатель нажатия на дату
 			tv.setOnClickListener(new OnClickListener() {
