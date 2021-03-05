@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity
 		
 		Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
 		
-		toolbar.setTitle("Water Calendar");
+		toolbar.setTitle("Factory Calendar");
 		toolbar.setSubtitle("Калкндарь потребления воды");
 		
 		setSupportActionBar(toolbar);
@@ -164,7 +164,8 @@ public class MainActivity extends AppCompatActivity
 					markColorText = 0x55808080;
 				}
 				tv.setTextColor(markColorText);
-				tv.setBackground(markDrawable);	
+				tv.setBackground(markDrawable);
+				//tv.setBackground(getDrawable(android.R.drawable.ic_menu_search
 			}
 				
 			//debag
