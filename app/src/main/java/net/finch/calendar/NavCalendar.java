@@ -34,8 +34,8 @@ public class NavCalendar
 	static void init() {
 		year = c.get(GregorianCalendar.YEAR);
 		month = c.get(GregorianCalendar.MONTH);
-		//markDates = dbReadMarkedDates();
-		//frameOfDates();
+		
+		
 	}
 	
 	static void nextMonth() {
@@ -49,7 +49,15 @@ public class NavCalendar
 	}
 	
 	
-	String getMonth() {
+	static Calendar getNow() {
+		Calendar now = new GregorianCalendar();
+		now.set(now.get(GregorianCalendar.YEAR)
+				, now.get(GregorianCalendar.MONTH)
+				, now.get(GregorianCalendar.DATE)
+				, 0, 0, 0);
+		return now;
+	}
+	static String getMonth() {
 		return Month.getString(c.get(GregorianCalendar.MONTH));
 	}
 	
@@ -72,7 +80,7 @@ public class NavCalendar
 		return cpm.getActualMaximum(GregorianCalendar.DAY_OF_MONTH);
 	}
 	
-	static ArrayList<Date> frameOfDates() {
+	static ArrayList<MyDate> frameOfDates() {
 		//SQLiteDatabase db = dbHelper.getWritableDatabase();
 		
 		
@@ -81,14 +89,9 @@ public class NavCalendar
 		int fwd = firstWeakDayOfMonth();
 		int mda = c.getActualMaximum(GregorianCalendar.DAY_OF_MONTH);
 		int mdp = maxDateInPreviousMonth();
-		ArrayList<Date> fod = new ArrayList<>();
+		ArrayList<MyDate> fod = new ArrayList<>();
 		
 		dbReadMarkedDates(-1);
-	/*	String str = "";
-		for(int i=0; i<markDates.size(); i++) 
-			str += "|"+markDates.get(i);
-		Toast.makeText(context, str, Toast.LENGTH_SHORT).show();
-		*/
 		if (fwd > 1) {
 			int firstDate = mdp-fwd+2;
 			for (int i=0; i<fwd-1; i++) {
@@ -96,19 +99,18 @@ public class NavCalendar
 				for (int m=0; m<markDates.size(); m++) {
 					if (firstDate+i == markDates.get(m)) mark = true;
 				}
-				fod.add(new Date(cnt, String.valueOf(firstDate+i), -1, mark));
+				fod.add(new MyDate(cnt, new GregorianCalendar(year, month-1, firstDate+i), -1, mark));
 				cnt++;
 			}
 		}
 		
 		dbReadMarkedDates(0);
-		
 		for (int i=1; i<=mda; i++) {
 			mark=false;
 			for (int m=0; m<markDates.size(); m++) {
 				if (i == markDates.get(m)) mark = true;
 			}
-			fod.add(new Date(cnt, String.valueOf(i), 0, mark));
+			fod.add(new MyDate(cnt, new GregorianCalendar(year, month, i), 0, mark));
 			cnt++;
 		}
 		
@@ -118,7 +120,7 @@ public class NavCalendar
 			for (int m=0; m<markDates.size(); m++) {
 				if (i == markDates.get(m)) mark = true;
 			}
-			fod.add(new Date(cnt+i, String.valueOf(i), 1, mark));
+			fod.add(new MyDate(cnt+i-1, new GregorianCalendar(year, month+1, i), 1, mark));
 		}
 		return fod;
 	}
@@ -144,10 +146,5 @@ public class NavCalendar
 		}
 		cur.close();
 		db.close();
-
-		/*if(offset == -1)
-			Toast.makeText(context, toast, Toast.LENGTH_SHORT).show();
-		*/
-		//return markDates;
 	}
 }

@@ -22,7 +22,7 @@ import android.support.v7.widget.Toolbar;
 
 public class MainActivity extends AppCompatActivity
 {
-	final boolean DEBUG = true;
+	final boolean DEBUG = false;
 	String debugTxt="";
 	
 	OnClickListener onDayClick;
@@ -33,18 +33,17 @@ public class MainActivity extends AppCompatActivity
 	TextView tvMonth;
 	TextView tvYear;
 	TextView tvDebag;
-	//int d = mDates.firstWeakDayOfMonth();
+	
 	
 	
 	
 	int width;
 	int padding;
 	int count = 0;
-
-	Calendar now = new GregorianCalendar();
+	
 	
 	NavCalendar nCal = new NavCalendar(this);
-	ArrayList<Date> frameOfDates;
+	ArrayList<MyDate> frameOfDates;
 	DBHelper dbhelper = new DBHelper(this);
 	
     @Override
@@ -107,7 +106,7 @@ public class MainActivity extends AppCompatActivity
 		
 		padding = llp.getPaddingTop();
 		
-		//updFrame();
+		
 		
 		/// Слушатель смены месяца
 		OnClickListener onChengeMonth = new OnClickListener() {
@@ -121,7 +120,7 @@ public class MainActivity extends AppCompatActivity
 					case R.id.tv_nextMonth:
 						nCal.nextMonth();
 						updFrame();
-						tvMonth.setText(nCal.getMonth());
+						
 						break;
 				}
 			}
@@ -140,7 +139,7 @@ public class MainActivity extends AppCompatActivity
 		for (int i=1; i<=7; i++) {
 			tv = new TextView(this);
 			if (count<frameOfDates.size()) 
-				tv.setText(frameOfDates.get(count).getDate());
+				tv.setText(frameOfDates.get(count).getDateString());
 			tv.setId(count);
 			tv.setLayoutParams(lp);
 			tv.setGravity(Gravity.CENTER);
@@ -165,23 +164,22 @@ public class MainActivity extends AppCompatActivity
 					markColorText = 0x55808080;
 				}
 				tv.setTextColor(markColorText);
-				//tv.setBackgroundColor(markColor);
-				tv.setBackground(markDrawable);
-				
-				//debag
-				debugTxt += frameOfDates.get(count).getMonthOffset();
-				debugTxt += "/"+frameOfDates.get(count).getDate();
-				debugTxt += "("+frameOfDates.get(count).getId()+");\n";
+				tv.setBackground(markDrawable);	
 			}
 				
+			//debag
+			
+			debugTxt += ""+nCal.getNow().getTime().getHours()+".";
+			debugTxt += nCal.getNow().getTime().getMinutes()+".";
+			debugTxt += nCal.getNow().getTime().getSeconds();
+			debugTxt += "("+frameOfDates.get(count).getId()+")\n";
 			
 			/// Выделение сегодняшней даты
-			if (now.get(GregorianCalendar.YEAR) == Integer.valueOf(nCal.getYear())
-				&& now.get(GregorianCalendar.MONTH) == Integer.valueOf(nCal.month)
-				&& now.get(GregorianCalendar.DATE) == Integer.valueOf(frameOfDates.get(count).getDate()) 
-				&& frameOfDates.get(count).getMonthOffset() == 0){
-					tv.setTextColor(0xffff6670);
-			}
+			Calendar now = nCal.getNow();
+			if (now.get(Calendar.YEAR) == frameOfDates.get(count).getCalendar().get(Calendar.YEAR)
+				&& now.get(Calendar.DAY_OF_YEAR) == frameOfDates.get(count).getCalendar().get(Calendar.DAY_OF_YEAR)
+				&& frameOfDates.get(count).getMonthOffset() == 0)
+				tv.setTextColor(0xffcc6670);
 			
 			/// Слушатель нажатия на дату
 			tv.setOnClickListener(new OnClickListener() {
@@ -190,14 +188,14 @@ public class MainActivity extends AppCompatActivity
 					public void onClick(View v)
 					{
 						
-						Date day = frameOfDates.get(v.getId());
+						MyDate day = frameOfDates.get(v.getId());
 						boolean marked = day.isMarked();
 						
 						SQLiteDatabase db = dbhelper.getWritableDatabase();
-						Calendar c = new GregorianCalendar(Integer.valueOf(nCal.year), Integer.valueOf(nCal.month)+day.getMonthOffset(), 1);
+						Calendar c = new GregorianCalendar(nCal.year, nCal.month+day.getMonthOffset(), 1);
 						String y = String.valueOf(c.get(GregorianCalendar.YEAR));
 						String m = String.valueOf(c.get(GregorianCalendar.MONTH));
-						String d = day.getDate();
+						String d = day.getDateString();
 						
 						if(!marked) {
 							
@@ -208,24 +206,18 @@ public class MainActivity extends AppCompatActivity
 							cv.put("date", Integer.valueOf(day.getDate()));
 
 							db.insert(DBHelper.DB_NAME, null, cv);
-							
-							//v.setBackgroundColor(0xff33dd77);
-							
 						}else {
 							String select = "year = ? and month = ? and date = ?";
 							String[] selArgs = {y, m, d};
-							//Cursor cur = db.query(DBHelper.DB_NAME, null, select, selArgs, null, null, null);
 							
-							//if(cur.moveToFirst()){
-								db.delete(dbhelper.DB_NAME, select, selArgs);
-							//}
+							db.delete(dbhelper.DB_NAME, select, selArgs);
 						}
 						db.close();
 						updFrame();
 					}		
 			});
 			
-			tvDebag.setText(""+width);
+			tvDebag.setText(""+debugTxt);
 			
 			ll.addView(tv);
 			count++;
@@ -245,8 +237,6 @@ public class MainActivity extends AppCompatActivity
 			llWeaks[i].removeAllViews();
 			inflateWeak(llWeaks[i]);
 		}
-		
-		//Toast.makeText(this, String.valueOf(nCal.frameOfDates().get(5).getId()), Toast.LENGTH_SHORT).show();
 	}
 	
 	
