@@ -26,7 +26,7 @@ public class DayView extends TextView
 	public void setTex(String s){
 		msg = s;
 		//setTextColor(0xff000000);
-		//setText(s);
+		setText(s);
 		//invalidate();
 		
 	}

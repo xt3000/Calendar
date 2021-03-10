@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity
 	LinearLayout[] llWeaks = new LinearLayout[6];
 	LinearLayout ll;
 	
-	TextView tv;
+	DayView tv;
 	TextView tvMonth;
 	TextView tvYear;
 	DayView tvDebag;
@@ -147,9 +147,9 @@ public class MainActivity extends AppCompatActivity
 		lp.setMargins(10,10,10,10);
 		
 		for (int i=1; i<=7; i++) {
-			tv = new TextView(this);
+			tv = new DayView(this);
 			if (count<frameOfDates.size()) 
-				tv.setText(frameOfDates.get(count).getDateString());
+				tv.setTex(frameOfDates.get(count).getDateString());
 			tv.setId(count);
 			tv.setLayoutParams(lp);
 			tv.setGravity(Gravity.CENTER);
@@ -167,15 +167,18 @@ public class MainActivity extends AppCompatActivity
 			
 			/// Выделение отмеченных дат
 			if (frameOfDates.get(count).isMarked()) {
+				tv.marked(true);
+				/*
 				Drawable markDrawable = getDrawable(R.drawable.circle);
 				int markColorText = 0xffffffff;
 				if (frameOfDates.get(count).getMonthOffset() != 0) {
 					markDrawable.setAlpha(80);
 					markColorText = 0x55808080;
+					
 				}
 				tv.setTextColor(markColorText);
 				tv.setBackground(markDrawable);
-				//tv.setBackground(getDrawable(android.R.drawable.ic_menu_search
+				*/
 			}
 				
 			//debag
@@ -190,7 +193,8 @@ public class MainActivity extends AppCompatActivity
 			if (now.get(Calendar.YEAR) == frameOfDates.get(count).getCalendar().get(Calendar.YEAR)
 				&& now.get(Calendar.DAY_OF_YEAR) == frameOfDates.get(count).getCalendar().get(Calendar.DAY_OF_YEAR)
 				&& frameOfDates.get(count).getMonthOffset() == 0)
-				tv.setTextColor(0xffff6670);
+				//tv.setTextColor(0xffff6670);
+				tv.setBackground(getDrawable(R.drawable.circle));
 			
 			/// Слушатель нажатия на дату
 			tv.setOnClickListener(new OnClickListener() {
