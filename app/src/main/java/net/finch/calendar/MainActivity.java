@@ -22,7 +22,7 @@ import android.support.v7.widget.Toolbar;
 
 public class MainActivity extends AppCompatActivity
 {
-	final boolean DEBUG = false;
+	final boolean DEBUG = true;
 	String debugTxt="";
 	
 	OnClickListener onDayClick;
@@ -32,7 +32,8 @@ public class MainActivity extends AppCompatActivity
 	TextView tv;
 	TextView tvMonth;
 	TextView tvYear;
-	TextView tvDebag;
+	DayView tvDebag;
+	DayView dv;
 	
 	
 	
@@ -69,9 +70,18 @@ public class MainActivity extends AppCompatActivity
 			
 		TextView tvNext = (TextView) findViewById(R.id.tv_nextMonth);
 		TextView tvPrev = (TextView) findViewById(R.id.tv_prevMonth);
-		tvDebag = (TextView) findViewById(R.id.tv_debag);
+		
+		tvDebag = (DayView) findViewById(R.id.tv_debag);
 		if (DEBUG == false)
 			tvDebag.setVisibility(View.GONE);
+		tvDebag.setTex("tvDebag");
+		tvDebag.marked(true);
+		
+			
+		dv = (DayView) findViewById(R.id.dv_debag);
+		dv.setTex("spasibo");
+		dv.marked(true);
+		dv.setTex("dildo");
 		
 		tvMonth = (TextView) findViewById(R.id.tv_month);
 		tvYear = (TextView) findViewById(R.id.tv_year);
@@ -218,7 +228,7 @@ public class MainActivity extends AppCompatActivity
 					}		
 			});
 			
-			tvDebag.setText(""+debugTxt);
+			//tvDebag.setTex(""+debugTxt);
 			
 			ll.addView(tv);
 			count++;
