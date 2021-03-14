@@ -29,17 +29,14 @@ public class MainActivity extends AppCompatActivity
 	LinearLayout[] llWeaks = new LinearLayout[6];
 	LinearLayout ll;
 	
-	DayView tv;
+	DayView dv;
 	TextView tvMonth;
 	TextView tvYear;
 	DayView tvDebag;
-	DayView dv;
-	
-	
-	
+	//TextView dv;
 	
 	int width;
-	int padding;
+	//int padding;
 	int count = 0;
 	
 	
@@ -74,21 +71,21 @@ public class MainActivity extends AppCompatActivity
 		tvDebag = (DayView) findViewById(R.id.tv_debag);
 		if (DEBUG == false)
 			tvDebag.setVisibility(View.GONE);
-		tvDebag.setTex("tvDebag");
-		tvDebag.marked(true);
-		
+		tvDebag.setDayText("tvDebag");
+		tvDebag.markedDown(true, 0xff48b3ff);
+		tvDebag.markedDown(true, 0xffffffff);
 			
-		dv = (DayView) findViewById(R.id.dv_debag);
-		dv.setTex("spasibo");
-		dv.marked(true);
-		dv.setTex("dildo");
+		//dv = (TextView) findViewById(R.id.dv_debag);
+		//dv.setText("spasibo");
+		//dv.marked(true);
+		//dv.setDayText("dildo");
 		
 		tvMonth = (TextView) findViewById(R.id.tv_month);
 		tvYear = (TextView) findViewById(R.id.tv_year);
 		
 		LinearLayout llp= (LinearLayout) findViewById(R.id.LL_wdays);
 		ll = (LinearLayout) findViewById(R.id.LL_w1);
-		width = llWeaks[0].getWidth()/7;
+		//width = llWeaks[0].getWidth()/7;
 		
 		llWeaks[0].getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener(){
 
@@ -110,13 +107,8 @@ public class MainActivity extends AppCompatActivity
 					updFrame();
 				}
 		});
-				 
-			
 		
-		
-		padding = llp.getPaddingTop();
-		
-		
+		//padding = llp.getPaddingTop();
 		
 		/// Слушатель смены месяца
 		OnClickListener onChengeMonth = new OnClickListener() {
@@ -147,14 +139,14 @@ public class MainActivity extends AppCompatActivity
 		lp.setMargins(10,10,10,10);
 		
 		for (int i=1; i<=7; i++) {
-			tv = new DayView(this);
+			dv = new DayView(this);
 			if (count<frameOfDates.size()) 
-				tv.setTex(frameOfDates.get(count).getDateString());
-			tv.setId(count);
-			tv.setLayoutParams(lp);
-			tv.setGravity(Gravity.CENTER);
-			tv.setWidth(width);
-			tv.setHeight(width);
+				dv.setDayText(frameOfDates.get(count).getDateString());
+			dv.setId(count);
+			dv.setLayoutParams(lp);
+			dv.setGravity(Gravity.CENTER);
+			//dv.setWidth(width);
+			//dv.setHeight(width);
 			
 		/*	/// Шахматная доска
 			if(count%2==0) tv.setBackgroundColor(0xfff0f0f0);
@@ -162,23 +154,13 @@ public class MainActivity extends AppCompatActivity
 			*/
 			/// Выделение текущего месяца
 			if (frameOfDates.get(count).getMonthOffset() == 0){
-				tv.setTypeface(Typeface.DEFAULT_BOLD);
-			}else tv.setTextColor(0x55808080);
+				dv.setTypeface(Typeface.DEFAULT_BOLD);
+			}else dv.setTextColor(0x55808080);
 			
 			/// Выделение отмеченных дат
 			if (frameOfDates.get(count).isMarked()) {
-				tv.marked(true);
-				/*
-				Drawable markDrawable = getDrawable(R.drawable.circle);
-				int markColorText = 0xffffffff;
-				if (frameOfDates.get(count).getMonthOffset() != 0) {
-					markDrawable.setAlpha(80);
-					markColorText = 0x55808080;
-					
-				}
-				tv.setTextColor(markColorText);
-				tv.setBackground(markDrawable);
-				*/
+				dv.markedUp(true);
+				dv.markedDown(true, 0xff48b3ff);
 			}
 				
 			//debag
@@ -194,10 +176,10 @@ public class MainActivity extends AppCompatActivity
 				&& now.get(Calendar.DAY_OF_YEAR) == frameOfDates.get(count).getCalendar().get(Calendar.DAY_OF_YEAR)
 				&& frameOfDates.get(count).getMonthOffset() == 0)
 				//tv.setTextColor(0xffff6670);
-				tv.setBackground(getDrawable(R.drawable.circle));
+				dv.setBackground(getDrawable(R.drawable.circle));
 			
 			/// Слушатель нажатия на дату
-			tv.setOnClickListener(new OnClickListener() {
+			dv.setOnClickListener(new OnClickListener() {
 
 					@Override
 					public void onClick(View v)
@@ -232,9 +214,9 @@ public class MainActivity extends AppCompatActivity
 					}		
 			});
 			
-			//tvDebag.setTex(""+debugTxt);
+			//tvDebag.setDayText(""+debugTxt);
 			
-			ll.addView(tv);
+			ll.addView(dv);
 			count++;
 		}
 		
