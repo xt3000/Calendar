@@ -16,22 +16,29 @@ import android.widget.*;
 import java.util.*;
 
 import android.support.v7.widget.Toolbar;
+import android.support.design.widget.*;
 
 //import android.support.v7.widget.*;
 
 
 public class MainActivity extends AppCompatActivity
 {
+	
+	Context maContext;
+	
 	final boolean DEBUG = true;
-	String debugTxt="";
+	 String debugTxt="";
 	
 	OnClickListener onDayClick;
-	LinearLayout[] llWeaks = new LinearLayout[6];
+	static LinearLayout[] llWeaks = new LinearLayout[6];
 	LinearLayout ll;
+	LinearLayout ddLayout;
+	BottomSheetBehavior ddBehavior;
+	DropDownLayout ddl;
 	
-	DayView dv;
-	TextView tvMonth;
-	TextView tvYear;
+	 DayView dv;
+	 TextView tvMonth;
+	 TextView tvYear;
 	DayView tvDebag;
 	//TextView dv;
 	
@@ -41,7 +48,7 @@ public class MainActivity extends AppCompatActivity
 	
 	
 	NavCalendar nCal = new NavCalendar(this);
-	ArrayList<MyDate> frameOfDates;
+	public static ArrayList<MyDate> frameOfDates;
 	DBHelper dbhelper = new DBHelper(this);
 	
     @Override
@@ -51,10 +58,8 @@ public class MainActivity extends AppCompatActivity
 		setContentView(R.layout.main_layout);
 		
 		Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
-		
 		toolbar.setTitle("Factory Calendar");
 		toolbar.setSubtitle("Калкндарь потребления воды");
-		
 		setSupportActionBar(toolbar);
 		
 			
@@ -64,7 +69,11 @@ public class MainActivity extends AppCompatActivity
 		llWeaks[3] = (LinearLayout) findViewById(R.id.LL_w4);
 		llWeaks[4] = (LinearLayout) findViewById(R.id.LL_w5);
 		llWeaks[5] = (LinearLayout) findViewById(R.id.LL_w6);
-			
+		
+		ddLayout = (LinearLayout)findViewById(R.id.bottom_sheet);
+		ddBehavior = BottomSheetBehavior.from(ddLayout);
+		ddl = new DropDownLayout(MainActivity.this);
+		
 		TextView tvNext = (TextView) findViewById(R.id.tv_nextMonth);
 		TextView tvPrev = (TextView) findViewById(R.id.tv_prevMonth);
 		
@@ -74,16 +83,11 @@ public class MainActivity extends AppCompatActivity
 		tvDebag.setDayText("tvDebag");
 		tvDebag.markedDown(true, 0xff48b3ff);
 		tvDebag.markedDown(true, 0xffffffff);
-			
-		//dv = (TextView) findViewById(R.id.dv_debag);
-		//dv.setText("spasibo");
-		//dv.marked(true);
-		//dv.setDayText("dildo");
 		
 		tvMonth = (TextView) findViewById(R.id.tv_month);
 		tvYear = (TextView) findViewById(R.id.tv_year);
 		
-		LinearLayout llp= (LinearLayout) findViewById(R.id.LL_wdays);
+		//LinearLayout llp= (LinearLayout) findViewById(R.id.LL_wdays);
 		ll = (LinearLayout) findViewById(R.id.LL_w1);
 		//width = llWeaks[0].getWidth()/7;
 		
@@ -103,12 +107,16 @@ public class MainActivity extends AppCompatActivity
 						llWeaks[0].getViewTreeObserver().removeGlobalOnLayoutListener(this);
 					}
 
-					width = (llWeaks[0].getWidth()/7)-20;
+					//width = (llWeaks[0].getWidth()/7)-20;
 					updFrame();
 				}
 		});
 		
 		//padding = llp.getPaddingTop();
+		
+		
+		
+		
 		
 		/// Слушатель смены месяца
 		OnClickListener onChengeMonth = new OnClickListener() {
@@ -131,9 +139,11 @@ public class MainActivity extends AppCompatActivity
 		tvNext.setOnClickListener(onChengeMonth);
 		tvPrev.setOnClickListener(onChengeMonth);
 		
+		
+		
     }
 	
-	void inflateWeak(LinearLayout ll) {
+	 void inflateWeak(LinearLayout ll) {
 		
 		LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 		lp.setMargins(10,10,10,10);
@@ -179,6 +189,8 @@ public class MainActivity extends AppCompatActivity
 				dv.setBackground(getDrawable(R.drawable.circle));
 			
 			/// Слушатель нажатия на дату
+			dv.setOnClickListener(new DayOnClickListener(this));
+			/*
 			dv.setOnClickListener(new OnClickListener() {
 
 					@Override
@@ -211,7 +223,19 @@ public class MainActivity extends AppCompatActivity
 						}
 						db.close();
 						updFrame();
-					}		
+					}	
+			});
+			*/
+			dv.setOnLongClickListener(new OnLongClickListener(){
+
+					@Override
+					public boolean onLongClick(View v)
+					{
+						
+						return ddl.onLongClickDay(v);
+					}
+
+				
 			});
 			
 			//tvDebag.setDayText(""+debugTxt);

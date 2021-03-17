@@ -1,10 +1,10 @@
 package net.finch.calendar;
 
 import android.content.*;
-import android.util.*;
-import android.widget.*;
 import android.graphics.*;
+import android.util.*;
 import android.view.*;
+import android.widget.*;
 
  
 public class DayView extends TextView
@@ -42,8 +42,6 @@ public class DayView extends TextView
 		setHeight(side);
 		// TODO: Implement this method
 		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-		
-		
 	}
 
 	@Override
@@ -54,16 +52,12 @@ public class DayView extends TextView
             super.onDraw(offscreen);
         }
         else if (markedUp || markedDown) {
-			
-			
 			int x = getWidth();
 			int y = getHeight();
 			if(x==0 || y==0) return;
 			Bitmap bitmap=Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_8888);
 			offscreen=new Canvas(bitmap);
 			super.draw(offscreen);
-			
-			
 			
 			if (markedUp) {
             	//Our offscreen image uses the dimensions of the view rather than the canvas
@@ -73,7 +67,6 @@ public class DayView extends TextView
             	paint.setStyle(Paint.Style.FILL);
             	paint.setColor(Color.parseColor("#CD5C5C"));
             	canvas.drawCircle(x/2, y/6, radius, paint);
-				
 			}
 			if (markedDown) {
 				int r = 3;
@@ -90,10 +83,7 @@ public class DayView extends TextView
 		else{
 			super.onDraw(canvas);
 		} 
-		
 	}
-	
-	
 	
 	public void markedUp(boolean m) {
 		markedUp = m;
@@ -103,6 +93,4 @@ public class DayView extends TextView
 		markedDown = m;
 		colorDown = color;
 	}
-	
-	
 }

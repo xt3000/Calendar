@@ -42,8 +42,16 @@ public class MyDate
 		return cal.get(GregorianCalendar.MONTH);
 	}
 	
+	String getMonthString() {
+		return String.valueOf(getMonth());
+	}
+	
 	int getYear() {
 		return cal.get(GregorianCalendar.YEAR);
+	}
+	
+	String getYearString() {
+		return String.valueOf(getYear());
 	}
 	
 	Calendar getCalendar() {
